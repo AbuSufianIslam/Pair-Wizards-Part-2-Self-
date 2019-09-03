@@ -10,7 +10,8 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.static(__dirname + '/public'));
 
-const baseQuery = 'SELECT posts.*, users.name FROM posts INNER JOIN users ON users.id = posts.id\n';
+const baseQuery =
+	'SELECT posts.*, users.name, counting.upvotes FROM posts INNER JOIN users ON users.id = posts.id INNER JOIN (SELECT postId, count(*) as upvotes FROM upvotes GROUP BY postId) AS counting ON counting.postId = posts.id\n';
 
 app.get('/', async (req, res, next) => {
 	//const posts = postBank.list();
